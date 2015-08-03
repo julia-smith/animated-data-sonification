@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <meta charset="utf-8">
 <title>U.S. Mass Shooting Fatalities Since 1982</title>
 <style>
@@ -7,20 +8,20 @@ html, body {
 }
 body {
   background-color: #fff;
-  color:#999999;
+  color:#666666;
   font-family:'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size:.8em;
 }
 
 a, a:visited {
-  color:#999999;
+  color:#666666;
 }
 a:hover {
-  color:#666666;
+  color:#444444;
 }
 
 h1 {
-  color:#666;
+  color:#444444;
   font-weight:bold;
 }
 
@@ -29,8 +30,16 @@ h1 {
   margin:0 auto;
 }
 
+#info-box {
+  margin-top:2em;
+}
+
+#info-box span {
+  font-weight:bold;
+}
+
 .html-container {
-  margin:2em 0;
+  margin:1em 0;
   padding:.5%;
 }
 
@@ -42,7 +51,7 @@ h1 {
 }
 
 .divider {
-  border-top:1px solid #ccc;
+  border-top:1px solid #aaaaaa;
   width:30%;
   margin:2em 0 1em 0;
 }
@@ -102,11 +111,11 @@ h1 {
     // timetracker box
     rect = s.rect(dotUnit/4, vbh*(dotUnit + 2), vbw-dotUnit/2, dotUnit/4);
     rect.attr({
-      fill: '#cccccc'
+      fill: '#aaaaaa'
     })
     progress = s.rect(dotUnit/4, vbh*(dotUnit + 2), 0, dotUnit/4);
     progress.attr({
-      fill: '#666666'
+      fill: '#444444'
     })
 
     // creates a group element
@@ -138,7 +147,7 @@ h1 {
       }
 
       dot.attr({
-        fill: '#cccccc',
+        fill: '#aaaaaa',
         class: 'light'
       });
 
@@ -162,7 +171,7 @@ h1 {
 
       var incident = s.rect(posX, posY, 3, total*1.75);
       incident.attr({
-        fill: '#cccccc',
+        fill: '#aaaaaa',
         class: 'bar'
       });
 
@@ -172,7 +181,7 @@ h1 {
         var label = splitDate[2];
         var t1 = s.text(posX, posY-dotUnit/2, label);
         t1.attr({
-          fill: '#999999',
+          fill: '#666666',
           'font-size': 8
         });
       } 
@@ -256,12 +265,16 @@ h1 {
 
     if (currentEvent[0] == prevEvent[0]) {
       // same event
+      var html = 'Last incident: <span>' + currentEvent[0] + '</span><br />';
+      html += 'Location: <span>' + currentEvent[3] + '</span><br />';
+      html += 'Fatalities: <span>' + currentEvent[2] + '</span>';
+      document.getElementById('info-box').innerHTML = html;
     } else {
       // new event
       animateDots(currentEvent);
       var bar = s.selectAll('rect.bar')[index];
       bar.animate({
-        'fill': '#666666'
+        'fill': '#444444'
       },2000);
       tally += parseInt(currentEvent[2]);
     }
@@ -303,7 +316,7 @@ h1 {
         if (selected){
           selected.attr({
             class: '',
-            fill: '#666666'
+            fill: '#444444'
           });
           selected.animate({
             cy: 400
@@ -350,7 +363,7 @@ h1 {
   <div class="html-container">
     <h1>Mass Shootings: Fatalities</h1>
 
-    <p class="intro"><script>document.write(data.length)</script> people have been killed in mass shootings since 1982</p>
+    <p class="intro"><script>document.write(data.length)</script> people have been killed in mass shootings* since 1982.</p>
 
 
     <audio id="track" src="media/Since1982.mp3" preload="auto" ontimeupdate="audioHooks(this)" onloadedmetadata="audioData(this)"><p>Your browser does not support the audio element</p></audio>
@@ -358,9 +371,13 @@ h1 {
     <button onclick="document.getElementById('track').play();">Play</button>
     <button onclick="document.getElementById('track').pause();">Pause</button>
 
-  </div>
+    <div id="info-box">
+      Last incident: <span><script>document.write(data[data.length-1].eventdate)</script></span><br />
+      Location: <span><script>document.write(data[data.length-1].eventname)</script></span><br />
+      Fatalities: <span><script>document.write(data[data.length-1].total)</script></span><br />
+    </div>
 
-  <div class="info-box"></div>
+  </div>
 
   <div id="timeline-container">
 
@@ -374,15 +391,15 @@ h1 {
   </div> <!-- #timeline-container -->
 
   <div class="html-container">
-    <p>This animated data sonification illustrates the loss of life due to mass shootings in the United States since 1982. It relies on the definition of "mass murder" found in the <a href="https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-1#two" target="_blank">FBI's crime classification report</a>: an incident with four or more fatalities (not including the shooter) in a single event, typically in a single location.</p>
+    <p>*This animated data sonification illustrates the loss of life due to mass shootings in the United States since 1982. It relies on the definition of "mass murder" found in the <a href="https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-1#two" target="_blank">FBI's crime classification report</a>: an incident with four or more fatalities (excluding the shooter) in a single event, typically in a single location.</p>
     <p>Each fatality is represented by a single orb in the illustration and a single note in the audio track. The time between clusters of notes is proportional to the time between each mass shooting incident.</p>
     <div class="divider"></div>
     <p>
       <strong>Credits:</strong><br />
       Data analysis, design, audio production, web development, and animation by Julia Smith/Knight-Mozilla<br />
       Research by Tawanda Kanhema/AJ+<br />
-      Data sonification was accomplished with MIDITime by Michael Corey/Reveal<br />
-      SVG animation was accomplished with Snap.svg by Dmitry Baranovskiy/Adobe
+      Data sonification was accomplished with MIDITime (Michael Corey/Reveal)<br />
+      SVG animation was accomplished with Snap.svg (Dmitry Baranovskiy/Adobe)
 
     </p>
   </div>
