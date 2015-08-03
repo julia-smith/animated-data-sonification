@@ -109,11 +109,11 @@ h1 {
     s.attr('viewBox', newVB);
 
     // timetracker box
-    rect = s.rect(dotUnit/4, vbh*(dotUnit + 2), vbw-dotUnit/2, dotUnit/4);
+    rect = s.rect(dotUnit/4, vbh*(dotUnit + 2), vbw-dotUnit/2, dotUnit/6);
     rect.attr({
       fill: '#aaaaaa'
     })
-    progress = s.rect(dotUnit/4, vbh*(dotUnit + 2), 0, dotUnit/4);
+    progress = s.rect(dotUnit/4, vbh*(dotUnit + 2), 0, dotUnit/6);
     progress.attr({
       fill: '#444444'
     })
@@ -167,7 +167,7 @@ h1 {
           b2s = beat,///2.01, //beats to seconds
           percent = b2s/duration,
           posX = (s.attr('viewBox').width - dotUnit/2) * percent + dotUnit/4,
-          posY = s.attr('viewBox').height-dotUnit*3+dotUnit/4;
+          posY = s.attr('viewBox').height-dotUnit*3+dotUnit/6.5;
 
       var incident = s.rect(posX, posY, 3, total*1.75);
       incident.attr({
@@ -337,11 +337,11 @@ h1 {
     }
 
     var lights = s.selectAll('.light').length;
-    console.log('lights left:' + lights);
-    console.log('difference:' + (data.length - lights) );
+    //console.log('lights left:' + lights);
+    //console.log('difference:' + (data.length - lights) );
 
     count++;
-    console.log(date + ' fatalities=' + total + ' count=' + count + /*' random=' + random + */' selectedcount=' + selectedCount + ' grandtotal=' + totals);
+    //console.log(date + ' fatalities=' + total + ' count=' + count + /*' random=' + random + */' selectedcount=' + selectedCount + ' grandtotal=' + totals);
 
   }
 
@@ -356,6 +356,27 @@ h1 {
     duration = audio.duration;
     labelAxis();
   }
+  function restart(){
+    document.getElementById('ms-timeline').innerHTML = '';
+    var audio = document.getElementById('track');
+    reinitVars();
+    initGraphic();
+    audioData(audio);
+    audio.pause();
+    audio.currentTime = 0;
+    audio.play();
+  }
+  function reinitVars(){
+    progress = '';
+    duration = '';
+    uniqueEvents = [];
+    prevEvent = [];
+    currentEvent;
+    tally = 0;
+    index = 0;
+    count = 0;
+    totals = 0;
+  }
 
 </script>
 
@@ -363,13 +384,14 @@ h1 {
   <div class="html-container">
     <h1>Mass Shootings: Fatalities</h1>
 
-    <p class="intro"><script>document.write(data.length)</script> people have been killed in mass shootings* since 1982.</p>
+    <p class="intro"><script>document.write(data.length)</script> people have been killed in mass shootings since 1982.</p>
 
 
     <audio id="track" src="media/Since1982.mp3" preload="auto" ontimeupdate="audioHooks(this)" onloadedmetadata="audioData(this)"><p>Your browser does not support the audio element</p></audio>
     <span id="tracktime">0 | 0</span>
     <button onclick="document.getElementById('track').play();">Play</button>
     <button onclick="document.getElementById('track').pause();">Pause</button>
+    <button onclick="restart()">Restart</button>
 
     <div id="info-box">
       Last incident: <span><script>document.write(data[data.length-1].eventdate)</script></span><br />
@@ -391,15 +413,15 @@ h1 {
   </div> <!-- #timeline-container -->
 
   <div class="html-container">
-    <p>*This animated data sonification illustrates the loss of life due to mass shootings in the United States since 1982. It relies on the definition of "mass murder" found in the <a href="https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-1#two" target="_blank">FBI's crime classification report</a>: an incident with four or more fatalities (excluding the shooter) in a single event, typically in a single location.</p>
+    <p>This animated data sonification illustrates the loss of life due to mass shootings in the United States since 1982. It relies on the definition of "mass murder" found in the <a href="https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-1#two" target="_blank">FBI's crime classification report</a>: an incident with four or more fatalities (excluding the shooter) in a single event, typically in a single location.</p>
     <p>Each fatality is represented by a single orb in the illustration and a single note in the audio track. The time between clusters of notes is proportional to the time between each mass shooting incident.</p>
     <div class="divider"></div>
     <p>
       <strong>Credits:</strong><br />
       Data analysis, design, audio production, web development, and animation by Julia Smith/Knight-Mozilla<br />
       Research by Tawanda Kanhema/AJ+<br />
-      Data sonification was accomplished with MIDITime (Michael Corey/Reveal)<br />
-      SVG animation was accomplished with Snap.svg (Dmitry Baranovskiy/Adobe)
+      Data sonification accomplished with MIDITime (Michael Corey/Reveal)<br />
+      SVG animation accomplished with Snap.svg (Dmitry Baranovskiy/Adobe)
 
     </p>
   </div>
