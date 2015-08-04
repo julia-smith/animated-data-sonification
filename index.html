@@ -219,20 +219,17 @@ h1 {
   }
 
   function updateTime(audio){
-    var acurrent = audio.currentTime,
-        aduration = audio.duration;
+    var acurrent = audio.currentTime;
 
-    var currentTime = Math.floor(acurrent),
-        duration = Math.floor(aduration);
+    var currentTime = Math.floor(acurrent);
     
-    document.getElementById('tracktime').innerHTML = prettyTime(audio.currentTime) + ' | ' + prettyTime(audio.duration);
+    document.getElementById('tracktime').innerHTML = prettyTime(audio.currentTime) + ' | ' + prettyTime(duration);
   }
 
   function progressBar(audio){
     var acurrent = audio.currentTime,
-        aduration = audio.duration,
         length = uniqueEvents.length,
-        percent = acurrent/aduration,
+        percent = acurrent/duration,
         newWidth = (s.attr('viewBox').width - dotUnit/2) * percent;
 
     progress.animate({
@@ -246,7 +243,6 @@ h1 {
   var index = 0;
   function addEvents(audio){
     var acurrent = audio.currentTime,
-        aduration = audio.duration,
         length = uniqueEvents.length;
 
     for (var i = 0; i < length; i++) {
@@ -355,16 +351,23 @@ h1 {
   function audioData(audio){
     duration = audio.duration;
     labelAxis();
+    updateTime(audio);
   }
   function restart(){
     document.getElementById('ms-timeline').innerHTML = '';
     var audio = document.getElementById('track');
-    reinitVars();
-    initGraphic();
-    audioData(audio);
-    audio.pause();
-    audio.currentTime = 0;
-    audio.play();
+    if(!audio.ended){
+      reinitVars();
+      initGraphic();
+      audioData(audio);
+
+      audio.pause();
+      audio.currentTime = 0;
+      audio.play();
+    }else{
+      window.location.reload();
+    }
+    
   }
   function reinitVars(){
     progress = '';
