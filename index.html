@@ -71,12 +71,19 @@ h1 {
 
   var s,
       dots,
+      bars,
       dotUnit = 15,
       progress,
       duration,
-      uniqueEvents = [];
+      uniqueEvents = [],
+      prevEvent = [],
+      currentEvent,
+      tally = 0;
+      index = 0;
+      count = 0,
+      totals = 0;
 
-	docReady(function(){
+  docReady(function(){
     s = Snap('#ms-timeline');
     initGraphic();
 
@@ -230,17 +237,14 @@ h1 {
     var acurrent = audio.currentTime,
         length = uniqueEvents.length,
         percent = acurrent/duration,
-        newWidth = (s.attr('viewBox').width - dotUnit/2) * percent;
+        newWidth = (s.attr('viewBox').width - dotUnit/2) * percent + 1;
 
     progress.animate({
       'width': newWidth
     }, 300);
   }
 
-  var prevEvent = [];
-  var currentEvent;
-  var tally = 0;
-  var index = 0;
+  
   function addEvents(audio){
     var acurrent = audio.currentTime,
         length = uniqueEvents.length;
@@ -287,8 +291,6 @@ h1 {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  var count = 0,
-      totals = 0;
   function animateDots(event){
     var date = event[0],
         total = event[2],
@@ -353,28 +355,39 @@ h1 {
     labelAxis();
     updateTime(audio);
   }
+  function checkAudio(){
+    var audio = document.getElementById('track');
+    if(audio.ended){
+      resetGlobals();
+      document.getElementById('ms-timeline').innerHTML = '';
+      initGraphic();
+      audio.currentTime = 0;
+      updateTime(audio);
+    }
+  }
   function restart(){
     document.getElementById('ms-timeline').innerHTML = '';
     var audio = document.getElementById('track');
     if(!audio.ended){
-      reinitVars();
+      resetGlobals();
       initGraphic();
-      audioData(audio);
-
       audio.pause();
       audio.currentTime = 0;
+      audioData(audio);
       audio.play();
     }else{
       window.location.reload();
-    }
-    
+    }    
   }
-  function reinitVars(){
+  function resetGlobals(){
+    dotUnit = 15;
+    dots = [];
+    bars = [];
     progress = '';
-    duration = '';
+    duration = 0;
     uniqueEvents = [];
     prevEvent = [];
-    currentEvent;
+    currentEvent = [];
     tally = 0;
     index = 0;
     count = 0;
@@ -423,6 +436,7 @@ h1 {
       <strong>Credits:</strong><br />
       Data analysis, design, audio production, web development, and animation by Julia Smith/Knight-Mozilla<br />
       Research by Tawanda Kanhema/AJ+<br />
+      Source: <a href="http://www.motherjones.com/politics/2012/07/mass-shootings-map?page=2" target="_blank">A Guide to Mass Shootings in America</a> (Mother Jones)<br />
       Data sonification accomplished with MIDITime (Michael Corey/Reveal)<br />
       SVG animation accomplished with Snap.svg (Dmitry Baranovskiy/Adobe)
 
