@@ -3889,91 +3889,91 @@ var data = [
         "beat": 414.515,
         "fatalityid": 1,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 414.59,
         "fatalityid": 2,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 414.665,
         "fatalityid": 3,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 414.74,
         "fatalityid": 4,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 414.815,
         "fatalityid": 5,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 414.89,
         "fatalityid": 6,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 414.965,
         "fatalityid": 7,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 415.04,
         "fatalityid": 8,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 415.115,
         "fatalityid": 9,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 415.19,
         "fatalityid": 10,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 415.265,
         "fatalityid": 11,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 415.34,
         "fatalityid": 12,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "09-16-2013",
         "beat": 415.415,
         "fatalityid": 13,
         "total": 13,
-        "eventname": "Washington Navy Yard, Washington"
+        "eventname": "Washington Navy Yard, Washington, D.C."
     },
     {
         "eventdate": "02-20-2014",

@@ -39,7 +39,7 @@ h1 {
 }
 
 .html-container {
-  margin:1em 0;
+  margin:0 0 1em 0;
   padding:.5%;
 }
 
@@ -47,7 +47,30 @@ h1 {
 
 }
 
+.bar:hover {
+  fill: #444444;
+}
+ .clone:hover {
+  fill: #666666;
+}
+
 .intro {
+}
+
+#tooltip {
+  text-align:center;
+  font-weight:bold;
+  margin-bottom:1em;
+}
+
+#tooltip span {
+  padding-left: 1em;
+}
+
+#tooltip .eventdate,
+#tooltip .eventname {
+  border-right:1px solid #aaaaaa;
+  padding-right:1em;
 }
 
 .divider {
@@ -75,6 +98,7 @@ h1 {
       dotUnit = 15,
       progress,
       duration,
+      fadeout = 6.7,
       uniqueEvents = [],
       prevEvent = [],
       currentEvent,
@@ -110,7 +134,7 @@ h1 {
 
     dotUnit = dotWidth;
     // add the first event to the events array
-    uniqueEvents.push([prevEvent, data[0].beat/2, data[0].total, data[0].eventname]);
+    uniqueEvents.push([prevEvent, data[0].beat/1.75, data[0].total, data[0].eventname]);
 
     // update the viewBox size
     s.attr('viewBox', newVB);
@@ -118,16 +142,19 @@ h1 {
     // timetracker box
     rect = s.rect(dotUnit/4, vbh*(dotUnit + 2), vbw-dotUnit/2, dotUnit/6);
     rect.attr({
-      fill: '#aaaaaa'
-    })
-    progress = s.rect(dotUnit/4, vbh*(dotUnit + 2), 0, dotUnit/6);
-    progress.attr({
-      fill: '#444444'
+      fill: '#aaaaaa',
+      id: 'xaxis'
     })
 
     // creates a group element
     dots = s.g().addClass('dots');
     bars = s.g().addClass('bars');
+
+
+    progress = s.rect(dotUnit/4, vbh*(dotUnit + 2), 0, dotUnit/6);
+    progress.attr({
+      fill: '#444444'
+    })
 
 
     for (var i=0; i<l; i++){
@@ -136,7 +163,7 @@ h1 {
       if (date !== prevEvent){
         // Divide beat by 2 to get the audio position in seconds 
         // The BPM is set to 120, so 120 beats per minute = 2 beats per second
-        uniqueEvents.push([date, data[i].beat/2.01, data[i].total, data[i].eventname]); 
+        uniqueEvents.push([date, data[i].beat/2.015, data[i].total, data[i].eventname]); 
         prevEvent = date;
       } 
       
@@ -169,10 +196,11 @@ h1 {
   function labelAxis(){
     for (var i=0, l=uniqueEvents.length; i<l; i++){
       var date = uniqueEvents[i][0],
-          total = uniqueEvents[i][2],
           beat = uniqueEvents[i][1],
+          total = uniqueEvents[i][2],
+          location = uniqueEvents[i][3],
           b2s = beat,///2.01, //beats to seconds
-          percent = b2s/duration,
+          percent = b2s/(duration - fadeout), //subtract 5 for the extra seconds of the audio fading out
           posX = (s.attr('viewBox').width - dotUnit/2) * percent + dotUnit/4,
           posY = s.attr('viewBox').height-dotUnit*3+dotUnit/6.5;
 
@@ -180,13 +208,31 @@ h1 {
       incident.attr({
         fill: '#aaaaaa',
         class: 'bar'
+      }).data({
+        'date': date,
+        'location': location,
+        'total': total
+      }).click(function(){
+        tooltip(this, posY-dotUnit/2);
+      }).hover(function(){
+        tooltip(this, posY-dotUnit/2);
+      }, function(){
+        s.select('#ttip-data').remove();
       });
 
+
+
+
       if ( (i == 0) || (i == l-1) ){
-        var splitDate = date.split('-');
-        //var label = parseInt(splitDate[0]) + '/' + splitDate[2];
-        var label = splitDate[2];
-        var t1 = s.text(posX, posY-dotUnit/2, label);
+        var splitDate = date.split('-'),
+            //label = parseInt(splitDate[0]) + '/' + splitDate[2],
+            label = splitDate[2],
+            t1;
+        if (i == l-1){
+          t1 = s.text(posX-15, posY-dotUnit/2, label); //minus 15 due to extra time at end of audio track
+        } else {
+          t1 = s.text(posX, posY-dotUnit/2, label);
+        }
         t1.attr({
           fill: '#666666',
           'font-size': 8
@@ -236,12 +282,15 @@ h1 {
   function progressBar(audio){
     var acurrent = audio.currentTime,
         length = uniqueEvents.length,
-        percent = acurrent/duration,
+        percent = acurrent/(duration - fadeout),
+        maxWidth = s.select('#xaxis').attr('width'),
         newWidth = (s.attr('viewBox').width - dotUnit/2) * percent + 1;
 
-    progress.animate({
-      'width': newWidth
-    }, 300);
+    if (newWidth < maxWidth) {
+      progress.animate({
+        'width': newWidth
+      }, 300);
+    }
   }
 
   
@@ -272,11 +321,29 @@ h1 {
     } else {
       // new event
       animateDots(currentEvent);
-      var bar = s.selectAll('rect.bar')[index];
-      bar.animate({
-        'fill': '#444444'
-      },2000);
-      tally += parseInt(currentEvent[2]);
+      var bar = s.selectAll('rect.bar')[index],
+          clone = bar.clone(),
+          speed = (duration/bar.getBBox().width)*10;
+
+      clone.before(bar)
+      .attr({
+        'fill': '#444444',
+        'width': 0,
+        'height': 0,
+        'class': 'clone'
+      })
+      .animate({ 
+        'width': bar.getBBox().width,
+        'height': bar.getBBox().height
+      }, 1500, mina.linear)
+      .click(function(){
+        tooltip(bar, bar.attr('y')-dotUnit/2);
+      })
+      .hover(function(){
+        tooltip(bar, bar.attr('y')-dotUnit/2);
+      }, function(){
+        s.select('#ttip-data').remove();
+      });
     }
 
     if ( (acurrent > uniqueEvents[length - 1][1]-.25) && (acurrent < (uniqueEvents[length - 1][1]) ) ){
@@ -312,23 +379,17 @@ h1 {
         }
         
         if (selected){
+          dots.append(selected); //brings selected dot to front
           selected.attr({
             class: '',
             fill: '#444444'
           });
           selected.animate({
-            cy: 400
+            cy: 450
           }, 1500, mina.easeout);
           selected.animate({
             opacity: 0
-          }, 750);          
-          /*selected.animate({
-            r: 14,
-          }, 50, function(){
-            selected.animate({
-              r: 6,
-            }, 50);
-          });  */   
+          }, 750);
         } 
       }, delay);
       selectedCount++;
@@ -341,6 +402,32 @@ h1 {
     count++;
     //console.log(date + ' fatalities=' + total + ' count=' + count + /*' random=' + random + */' selectedcount=' + selectedCount + ' grandtotal=' + totals);
 
+  }
+
+  function tooltip(elem, posY){
+    var date = elem.data('date'),
+        location = elem.data('location'),
+        total = elem.data('total'),
+        text = date + '   |   ' + location + '   |   ' + total + ' fatalities',
+        info = s.text(0, posY, text),
+        tip = s.select('#ttip-data'),
+        posX;
+
+    if (tip) {
+      tip.remove();
+    }
+
+    info.attr({
+      fill: '#666666',
+      'font-size': 8,
+      //'font-weight': 'bold',
+      id: 'ttip-data'
+    });
+    info.node.setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve');
+    posX = s.select('#xaxis').attr('width')/2 - info.node.clientWidth/2;
+    info.attr({
+      x: posX
+    })
   }
 
   function audioHooks(audio){
@@ -358,26 +445,27 @@ h1 {
   function checkAudio(){
     var audio = document.getElementById('track');
     if(audio.ended){
-      resetGlobals();
-      document.getElementById('ms-timeline').innerHTML = '';
-      initGraphic();
-      audio.currentTime = 0;
-      updateTime(audio);
+      rewind(audio);
+    } else {
+      audio.play();
     }
   }
   function restart(){
     document.getElementById('ms-timeline').innerHTML = '';
     var audio = document.getElementById('track');
     if(!audio.ended){
-      resetGlobals();
-      initGraphic();
-      audio.pause();
-      audio.currentTime = 0;
-      audioData(audio);
-      audio.play();
+      rewind(audio);
     }else{
       window.location.reload();
     }    
+  }
+  function rewind(audio){
+    resetGlobals();
+    audio.pause();
+    audio.currentTime = 0;
+    initGraphic();
+    audioData(audio);
+    audio.play();
   }
   function resetGlobals(){
     dotUnit = 15;
@@ -400,12 +488,12 @@ h1 {
   <div class="html-container">
     <h1>Mass Shootings: Fatalities</h1>
 
-    <p class="intro"><script>document.write(data.length)</script> people have been killed in mass shootings since 1982.</p>
+    <p class="intro"><script>document.write(data.length)</script> people have been killed in mass shootings since <script>document.write(data[0].eventdate.split('-')[2])</script>.</p>
 
 
     <audio id="track" src="media/Since1982.mp3" preload="auto" ontimeupdate="audioHooks(this)" onloadedmetadata="audioData(this)"><p>Your browser does not support the audio element</p></audio>
     <span id="tracktime">0 | 0</span>
-    <button onclick="document.getElementById('track').play();">Play</button>
+    <button onclick="checkAudio();">Play</button>
     <button onclick="document.getElementById('track').pause();">Pause</button>
     <button onclick="restart()">Restart</button>
 
@@ -429,16 +517,23 @@ h1 {
   </div> <!-- #timeline-container -->
 
   <div class="html-container">
+
+    <!--<div id="tooltip">
+      <span class="eventdate"><script>document.write(data[data.length-1].eventdate)</script></span>
+      <span class="eventname"><script>document.write(data[data.length-1].eventname)</script></span>
+      <span class="total"><script>document.write(data[data.length-1].total)</script></span> fatalities
+    </div>-->
+
     <p>This animated data sonification illustrates the loss of life due to mass shootings in the United States since 1982. It relies on the definition of "mass murder" found in the <a href="https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-1#two" target="_blank">FBI's crime classification report</a>: an incident with four or more fatalities (excluding the shooter) in a single event, typically in a single location.</p>
     <p>Each fatality is represented by a single orb in the illustration and a single note in the audio track. The time between clusters of notes is proportional to the time between each mass shooting incident.</p>
+
     <div class="divider"></div>
     <p>
       <strong>Credits:</strong><br />
       Data analysis, design, audio production, web development, and animation by Julia Smith/Knight-Mozilla<br />
       Research by Tawanda Kanhema/AJ+<br />
-      Source: <a href="http://www.motherjones.com/politics/2012/07/mass-shootings-map?page=2" target="_blank">A Guide to Mass Shootings in America</a> (Mother Jones)<br />
-      Data sonification accomplished with MIDITime (Michael Corey/Reveal)<br />
-      SVG animation accomplished with Snap.svg (Dmitry Baranovskiy/Adobe)
+      Data sonification produced with MIDITime (Michael Corey/Reveal)<br />
+      SVG animation produced with Snap.svg (Dmitry Baranovskiy/Adobe)
 
     </p>
   </div>
