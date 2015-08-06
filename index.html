@@ -111,7 +111,8 @@ h1 {
     s = Snap('#ms-timeline');
     initGraphic();
 
-
+    s.transform('90,0,0');
+    
     /*controls = Snap(30, 30);
     var play = controls.polygon(10,10,10,30,100,100).attr({ fill: "red", stroke: "blue" });*/
   });
@@ -194,6 +195,11 @@ h1 {
   }
 
   function labelAxis(){
+    //hardcoding duration because mobile browsers can't actually calculate it
+    if (!duration || duration<1){
+      duration = 226.063688;
+    }
+
     for (var i=0, l=uniqueEvents.length; i<l; i++){
       var date = uniqueEvents[i][0],
           beat = uniqueEvents[i][1],
@@ -385,8 +391,10 @@ h1 {
             fill: '#444444'
           });
           selected.animate({
-            cy: 450
-          }, 1500, mina.easeout);
+            cy: 350,
+            //transform: 'r90,200,200'//,
+            //opacity: 0
+          }, 1500, mina.easeinout);
           selected.animate({
             opacity: 0
           }, 750);
@@ -472,7 +480,7 @@ h1 {
     dots = [];
     bars = [];
     progress = '';
-    duration = 0;
+    duration = 226.063688;
     uniqueEvents = [];
     prevEvent = [];
     currentEvent = [];
