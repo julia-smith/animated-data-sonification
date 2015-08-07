@@ -39,12 +39,19 @@ h1 {
 }
 
 .html-container {
-  margin:0 0 1em 0;
+  margin:1em 0;
   padding:.5%;
 }
 
 #timeline-container {
 
+}
+
+.bar, .clone {
+  -webkit-transition: fill 100ms linear;
+  -moz-transition: fill 100ms linear;
+  -o-transition: fill 100ms linear;
+  transition: fill 100ms linear;
 }
 
 .bar:hover {
@@ -105,7 +112,8 @@ h1 {
       tally = 0;
       index = 0;
       count = 0,
-      totals = 0;
+      totals = 0,
+      accentColor = 'darkred';
 
   docReady(function(){
     s = Snap('#ms-timeline');
@@ -154,7 +162,7 @@ h1 {
 
     progress = s.rect(dotUnit/4, vbh*(dotUnit + 2), 0, dotUnit/6);
     progress.attr({
-      fill: '#444444'
+      fill: accentColor
     })
 
 
@@ -292,7 +300,7 @@ h1 {
         maxWidth = s.select('#xaxis').attr('width'),
         newWidth = (s.attr('viewBox').width - dotUnit/2) * percent + 1;
 
-    if (newWidth < maxWidth) {
+    if (newWidth <= maxWidth) {
       progress.animate({
         'width': newWidth
       }, 300);
@@ -333,7 +341,7 @@ h1 {
 
       clone.before(bar)
       .attr({
-        'fill': '#444444',
+        'fill': accentColor,
         'width': 0,
         'height': 0,
         'class': 'clone'
@@ -388,16 +396,17 @@ h1 {
           dots.append(selected); //brings selected dot to front
           selected.attr({
             class: '',
-            fill: '#444444'
+            fill: accentColor
           });
           selected.animate({
-            cy: 350,
+            cy: 330
             //transform: 'r90,200,200'//,
             //opacity: 0
           }, 1500, mina.easeinout);
           selected.animate({
-            opacity: 0
-          }, 750);
+            opacity: 0,
+            //fill: '#444444'
+          }, 850);
         } 
       }, delay);
       selectedCount++;
@@ -427,8 +436,8 @@ h1 {
 
     info.attr({
       fill: '#666666',
+      opacity: 0,
       'font-size': 8,
-      //'font-weight': 'bold',
       id: 'ttip-data'
     });
     info.node.setAttributeNS('http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve');
@@ -436,6 +445,9 @@ h1 {
     info.attr({
       x: posX
     })
+    info.animate({
+      opacity: 1
+    }, 100)
   }
 
   function audioHooks(audio){
@@ -532,7 +544,7 @@ h1 {
       <span class="total"><script>document.write(data[data.length-1].total)</script></span> fatalities
     </div>-->
 
-    <p>This animated data sonification illustrates the loss of life due to mass shootings in the United States since 1982. It relies on the definition of "mass murder" found in the <a href="https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-1#two" target="_blank">FBI's crime classification report</a>: an incident with four or more fatalities (excluding the shooter) in a single event, typically in a single location.</p>
+    <p>This animated data sonification illustrates the loss of life due to mass shootings in the United States since 1982. It relies on the definition of "mass murder" found in the <a href="https://www.fbi.gov/stats-services/publications/serial-murder/serial-murder-1#two" target="_blank">FBI's crime classification report</a>: an incident with four or more fatalities (excluding the perpetrator) in a single event, typically in a single location.</p>
     <p>Each fatality is represented by a single orb in the illustration and a single note in the audio track. The time between clusters of notes is proportional to the time between each mass shooting incident.</p>
 
     <div class="divider"></div>
