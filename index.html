@@ -13,6 +13,24 @@ body {
   font-size:.8em;
 }
 
+button {
+  border:none;
+  background-color:#444444;
+  color:white;
+  -webkit-transition: background-color 100ms linear;
+  -moz-transition: background-color 100ms linear;
+  -o-transition: background-color 100ms linear;
+  transition: background-color 100ms linear;
+}
+button:hover {
+  cursor:pointer;
+  background-color:#666666;
+}
+button:focus {
+  outline:none;
+  background-color:#666666;
+}
+
 a, a:visited {
   color:#666666;
 }
@@ -93,11 +111,10 @@ h1 {
 <body>
 
 <script src="media/data.js"></script>
-<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>-->
+<script src="scripts/ready.min.js"></script>
 <script src="scripts/snap.svg-min.js"></script>
 <script>
-
-  !function(t,e){function n(){if(!a){a=!0;for(var t=0;t<d.length;t++)d[t].fn.call(window,d[t].ctx);d=[]}}function o(){"complete"===document.readyState&&n()}t=t||"docReady",e=e||window;var d=[],a=!1,c=!1;e[t]=function(t,e){return a?void setTimeout(function(){t(e)},1):(d.push({fn:t,ctx:e}),void("complete"===document.readyState?setTimeout(n,1):c||(document.addEventListener?(document.addEventListener("DOMContentLoaded",n,!1),window.addEventListener("load",n,!1)):(document.attachEvent("onreadystatechange",o),window.attachEvent("onload",n)),c=!0)))}}("docReady",window);
+  
 
   var s,
       dots,
@@ -118,11 +135,6 @@ h1 {
   docReady(function(){
     s = Snap('#ms-timeline');
     initGraphic();
-
-    s.transform('90,0,0');
-    
-    /*controls = Snap(30, 30);
-    var play = controls.polygon(10,10,10,30,100,100).attr({ fill: "red", stroke: "blue" });*/
   });
 
   function initGraphic(){
