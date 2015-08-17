@@ -1,5 +1,6 @@
 # animated-data-sonification
 data-driven audio + animation experiment
+
 Here's a demo: [Mass shootings since 1982](http://julia-smith.com/animated-data-sonification)
 
 ## Data and stuff
