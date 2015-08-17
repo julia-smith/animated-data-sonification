@@ -135,6 +135,7 @@ h1 {
   docReady(function(){
     s = Snap('#ms-timeline');
     initGraphic();
+    bigButtons();
   });
 
   function initGraphic(){
@@ -212,6 +213,48 @@ h1 {
 
     //console.log(uniqueEvents);
     currentEvent = uniqueEvents[0];
+  }
+
+  function bigButtons(){
+    //play button stuff
+    var playMatrix = new Snap.Matrix();
+    playMatrix.scale(.4,.4);            // play with scaling before and after the rotate
+    playMatrix.translate(660, 210);
+
+    var playbg = s.rect(0,0,180,183).transform(playMatrix).attr({
+      fill: '#444444'
+    });
+    var play = s.polyline([45,40,140,90,45,140]).transform(playMatrix).attr({
+      fill: '#fff'
+    });
+
+    var playgroup = s.group();
+    playgroup.add(playbg, play);
+    playgroup.attr({
+      cursor: 'pointer',
+      opacity: .9
+    });
+    playgroup.hover(function(){
+      playgroup.animate({
+        opacity: 1
+      }, 250, mina.easeinout)
+    }, function(){
+      playgroup.animate({
+        opacity: .9
+      }, 250, mina.easeinout)
+    });
+
+
+    playgroup.click(function(){
+      var scale = 0;
+      playgroup.animate({
+        //transform: miniMatrix
+        opacity:0
+      }, 250, mina.easeinout, function(){
+        this.remove();
+        checkAudio();
+      });
+    })
   }
 
   function labelAxis(){
