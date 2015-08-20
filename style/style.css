@@ -17,6 +17,7 @@ button {
   -moz-transition: background-color 100ms linear;
   -o-transition: background-color 100ms linear;
   transition: background-color 100ms linear;
+  min-width:70px;
 }
 
 button:hover {
@@ -50,20 +51,24 @@ h1 {
 }
 
 #info-box {
-  margin-top:2em;
+  margin:1.5em 0 .5em 0;
 }
 
 #info-box span {
   font-weight:bold;
 }
 
+#tracktime {
+  margin-right:1em;
+}
+
 .html-container {
-  margin:0 0 1em 0;
+  margin:0;
   padding:.5%;
 }
 
 #timeline-container {
-  margin: 1em 0 0 0;
+  margin: 0 0 1em 0;
 }
 
 .bar, .clone {
@@ -81,6 +86,7 @@ h1 {
 }
 
 .intro {
+  margin-bottom:2em;
 }
 
 #tooltip {

@@ -44,7 +44,7 @@ function initGraphic(){
   s.attr('viewBox', newVB);
 
   // timetracker box
-  rect = s.rect(dotUnit/4, vbh*(dotUnit + 2), vbw-dotUnit/2, dotUnit/6);
+  rect = s.rect(dotUnit/4, vbh*(dotUnit + 1), vbw-dotUnit/2, dotUnit/6);
   rect.attr({
     fill: '#aaaaaa',
     id: 'xaxis'
@@ -55,7 +55,7 @@ function initGraphic(){
   bars = s.g().addClass('bars');
 
 
-  progress = s.rect(dotUnit/4, vbh*(dotUnit + 2), 0, dotUnit/6);
+  progress = s.rect(dotUnit/4, vbh*(dotUnit + 1), 0, dotUnit/6);
   progress.attr({
     fill: accentColor
   })
@@ -154,7 +154,7 @@ function labelAxis(){
         b2s = beat,///2.01, //beats to seconds
         percent = b2s/(duration - fadeout), //subtract 5 for the extra seconds of the audio fading out
         posX = (s.attr('viewBox').width - dotUnit/2) * percent + dotUnit/4,
-        posY = s.attr('viewBox').height-dotUnit*3+dotUnit/6.5;
+        posY = s.attr('viewBox').height-dotUnit*4+dotUnit/6.5;
 
     var incident = s.rect(posX, posY, 3, total*1.75);
     incident.attr({
@@ -415,6 +415,13 @@ function checkAudio(){
       });
     }
   }
+  document.getElementById('pauseBtn').style.display = 'inline';
+  document.getElementById('playBtn').style.display = 'none';
+}
+function pauseAudio(){
+  document.getElementById('track').pause();
+  document.getElementById('pauseBtn').style.display = 'none';
+  document.getElementById('playBtn').style.display = 'inline';
 }
 function restart(){
   document.getElementById('ms-timeline').innerHTML = '';
@@ -432,6 +439,8 @@ function rewind(audio){
   initGraphic();
   audioData(audio);
   audio.play();
+  document.getElementById('pauseBtn').style.display = 'inline';
+  document.getElementById('playBtn').style.display = 'none';
 }
 function resetGlobals(){
   s.selectAll('.bars').remove();
