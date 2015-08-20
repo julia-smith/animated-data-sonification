@@ -399,6 +399,10 @@ function audioData(audio){
   duration = audio.duration;
   labelAxis();
   updateTime(audio);
+  audio.addEventListener("ended",function() {
+    document.getElementById('pauseBtn').style.display = 'none';
+    document.getElementById('playBtn').style.display = 'inline';
+  });
 }
 function checkAudio(){
   var audio = document.getElementById('track');
