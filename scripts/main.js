@@ -135,8 +135,8 @@ function bigButtons(){
       opacity:0
     }, 250, mina.easeinout, function(){
       this.remove();
-      checkAudio();
     });
+    document.getElementById('playBtn').click();
   })
 }
 
