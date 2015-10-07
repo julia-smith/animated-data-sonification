@@ -44,7 +44,7 @@ function initGraphic(){
   s.attr('viewBox', newVB);
 
   // timetracker box
-  rect = s.rect(dotUnit/4, vbh*(dotUnit + 1.5), vbw-dotUnit/2, dotUnit/6);
+  rect = s.rect(dotUnit/4, vbh*(dotUnit + 1.55), vbw-dotUnit/2, dotUnit/6);
   rect.attr({
     fill: '#aaaaaa',
     id: 'xaxis'
@@ -55,7 +55,7 @@ function initGraphic(){
   bars = s.g().addClass('bars');
 
 
-  progress = s.rect(dotUnit/4, vbh*(dotUnit + 1.5), 0, dotUnit/6);
+  progress = s.rect(dotUnit/4, vbh*(dotUnit + 1.55), 0, dotUnit/6);
   progress.attr({
     fill: accentColor
   })
